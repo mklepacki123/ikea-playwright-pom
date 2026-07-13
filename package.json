@@ -1,0 +1,23 @@
+{
+  "name": "ikea-playwright-pom",
+  "version": "1.0.0",
+  "description": "Automation training - example on IKEA site",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mklepacki123/ikea-playwright-pom.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mklepacki123/ikea-playwright-pom/issues"
+  },
+  "homepage": "https://github.com/mklepacki123/ikea-playwright-pom#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.1"
+  }
+}
