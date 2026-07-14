@@ -10,12 +10,21 @@ export class CookieBanner {
     this.onetrustAcceptButton = page.locator('#onetrust-accept-btn-handler');
     this.jobsAcceptButton = page.locator('#system-ialert-button');
   }
- async acceptIfVisible() {
-    if (await this.onetrustAcceptButton.isVisible().catch(() => false)) {
-      await this.onetrustAcceptButton.click();
-    }
-    if (await this.jobsAcceptButton.isVisible().catch(() => false)) {
-      await this.jobsAcceptButton.click();
-    }
+
+  async registerAutoAccept(): Promise<void> {
+    await this.page.addLocatorHandler(
+      this.onetrustAcceptButton,
+      async () => {
+        await this.onetrustAcceptButton.click();
+      },
+      { times: 1 },
+    );
+    await this.page.addLocatorHandler(
+      this.jobsAcceptButton,
+      async () => {
+        await this.jobsAcceptButton.click();
+      },
+      { times: 1 },
+    );
   }
 }
