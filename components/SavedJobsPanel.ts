@@ -14,7 +14,7 @@ export class SavedJobsPanel {
   }
 
   async expectSavedJobsCount(count: number): Promise<void> {
-    await expect(this.savedJobsCounter).toContainText(count.toString());
+    await expect(this.savedJobsCounter).toHaveText(`(${count})`);
   }
 
   async openSavedJobs(): Promise<void> {

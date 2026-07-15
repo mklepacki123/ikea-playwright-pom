@@ -23,14 +23,14 @@ test.describe('IKEA Jobs Search', () => {
     savedJobsPanel = new SavedJobsPanel(page);
   });
 
-  test('should search for Manager jobs and fallback to Designer if no results', async ({
+  test('user searches for a job, saves the first result and sees it in saved jobs', async ({
     page,
   }) => {
     let activeSearchTerm = PRIMARY_SEARCH_TERM;
 
     // Step 1: Open the IKEA website
     await homePage.goto();
-    await expect(page).toHaveURL(/.*ikea\.com/);
+    await expect(page).toHaveURL(/ikea\.com/);
 
     // Step 2: Click on 'Jobs' tab
     await homePage.openJobs();
@@ -41,9 +41,9 @@ test.describe('IKEA Jobs Search', () => {
     // Checkpoint: verify navigation to jobs.ikea.com domain
     await expect(page).toHaveURL(/jobs\.ikea\.com/);
 
-    // Force early consent: any action triggers the banner handler now,
-    // long before Save — prevents the consent/save race
-    await expect(jobsSearchPage.keywordInput).toBeVisible();
+    // Checkpoint: search page is ready for interaction
+    // (also triggers consent handling early in the flow)
+    await jobsSearchPage.expectSearchFormReady();
 
     // Step 4-5: Search for PRIMARY_SEARCH_TERM
     await jobsSearchPage.searchForJob(activeSearchTerm);

@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 export class JobsSearchPage {
   readonly page: Page;
@@ -6,7 +6,7 @@ export class JobsSearchPage {
   readonly keywordInput: Locator;
   readonly searchJobsButton: Locator;
   readonly searchResults: Locator;
-  readonly jobCards: Locator;
+  readonly jobTitles: Locator;
   readonly noResultsMessage: Locator;
 
   constructor(page: Page) {
@@ -15,8 +15,12 @@ export class JobsSearchPage {
     this.keywordInput = this.searchForm.getByRole('searchbox', { name: 'Keyword Search' });
     this.searchJobsButton = this.searchForm.getByRole('button', { name: 'Search jobs' });
     this.searchResults = page.locator('#search-results');
-    this.jobCards = page.locator('.job-list__title');
+    this.jobTitles = page.locator('.job-list__title');
     this.noResultsMessage = page.locator('#no-results');
+  }
+
+  async expectSearchFormReady(): Promise<void> {
+    await expect(this.keywordInput).toBeVisible();
   }
 
   async searchForJob(jobTitle: string): Promise<void> {
@@ -26,7 +30,7 @@ export class JobsSearchPage {
 
   async getResultsCount(): Promise<number> {
     await Promise.race([
-      this.jobCards.first().waitFor({ state: 'visible' }),
+      this.jobTitles.first().waitFor({ state: 'visible' }),
       this.noResultsMessage.waitFor({ state: 'visible' }),
     ]);
 
@@ -34,6 +38,6 @@ export class JobsSearchPage {
   }
 
   async openFirstJob(): Promise<void> {
-    await this.jobCards.first().click();
+    await this.jobTitles.first().click();
   }
 }
