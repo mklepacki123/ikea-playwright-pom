@@ -55,3 +55,7 @@ components/
 ├── CookieBanner.ts # oba banery (OneTrust + Radancy)
 └── SavedJobsPanel.ts # licznik, otwarcie panelu, tytuł zapisanej oferty
 _/
+
+TO DO LIST:
+
+- You could even test such a branch using a forced input—specifically, the string "xyzabc123"—in a separate fallback test.
