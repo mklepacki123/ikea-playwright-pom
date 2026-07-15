@@ -3,6 +3,7 @@ import { HomePage } from '../pages/HomePage';
 import { JobsLandingPage } from '../pages/JobsLandingPage';
 import { JobsSearchPage } from '../pages/JobsSearchPage';
 import { JobDetailsPage } from '../pages/JobDetailsPage';
+import { SavedJobsPanel } from '../components/SavedJobsPanel';
 
 const PRIMARY_SEARCH_TERM = 'Manager';
 const FALLBACK_SEARCH_TERM = 'Designer';
@@ -12,12 +13,14 @@ test.describe('IKEA Jobs Search', () => {
   let jobsLandingPage: JobsLandingPage;
   let jobsSearchPage: JobsSearchPage;
   let jobDetailsPage: JobDetailsPage;
+  let savedJobsPanel: SavedJobsPanel;
 
   test.beforeEach(async ({ page }) => {
     homePage = new HomePage(page);
     jobsLandingPage = new JobsLandingPage(page);
     jobsSearchPage = new JobsSearchPage(page);
     jobDetailsPage = new JobDetailsPage(page);
+    savedJobsPanel = new SavedJobsPanel(page);
   });
 
   test('should search for Manager jobs and fallback to Designer if no results', async ({
@@ -37,6 +40,10 @@ test.describe('IKEA Jobs Search', () => {
 
     // Checkpoint: verify navigation to jobs.ikea.com domain
     await expect(page).toHaveURL(/jobs\.ikea\.com/);
+
+    // Force early consent: any action triggers the banner handler now,
+    // long before Save — prevents the consent/save race
+    await expect(jobsSearchPage.keywordInput).toBeVisible();
 
     // Step 4-5: Search for PRIMARY_SEARCH_TERM
     await jobsSearchPage.searchForJob(activeSearchTerm);
@@ -67,5 +74,17 @@ test.describe('IKEA Jobs Search', () => {
 
     // Checkpoint: verify job was saved
     await jobDetailsPage.expectJobIsSaved();
+
+    // Step 10: Check that "Saved jobs" element has '1' in it
+    await savedJobsPanel.expectSavedJobsCount(1);
+
+    // Step 11: Click on "Saved jobs" element
+    await savedJobsPanel.openSavedJobs();
+
+    // Checkpoint: verify "Saved jobs" panel is open
+    await savedJobsPanel.expectSavedJobsPanelOpen();
+
+    // Step 12: Check that the job title in "Saved jobs" is activeSearchTerm
+    await savedJobsPanel.expectSavedJobTitleContains(activeSearchTerm);
   });
 });

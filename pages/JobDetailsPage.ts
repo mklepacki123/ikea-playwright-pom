@@ -10,7 +10,10 @@ export class JobDetailsPage {
     this.page = page;
     this.jobTitle = page.getByRole('heading', { level: 1 });
     this.jobDetailsSection = page.locator('[data-selector-name="jobdetails"]');
-    this.saveJobButton = this.jobDetailsSection.getByRole('button', { name: 'Save Job' });
+    this.saveJobButton = this.jobDetailsSection
+      .getByRole('button', { name: 'Save Job' })
+      .filter({ visible: true })
+      .first();
   }
 
   async expectJobTitleContains(keyword: string): Promise<void> {
