@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 export class CookieBanner {
   readonly page: Page;
@@ -26,5 +26,14 @@ export class CookieBanner {
       },
       { times: 1 },
     );
+  }
+
+  async waitForJobsConsentSettled(): Promise<void> {
+    // In a fresh browser context the consent dialog always appears shortly
+    // after load; accepting it mid-form resets form modules (category select,
+    // location autocomplete). This retrying assertion gives the auto-accept
+    // handler repeated chances to fire and then verifies the banner is gone —
+    // by the time it passes, consent is settled and the form is safe to use.
+    await expect(this.jobsAcceptButton).toBeHidden({ timeout: 15000 });
   }
 }
