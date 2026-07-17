@@ -24,6 +24,7 @@ export class JobAlertsSubscriptionPanel {
     this.signUpButton = this.subscriptionPanel.getByRole('button', {
       name: 'Submit Job Alerts',
     });
+    // injected outside .job-alert__wrapper, directly into the form
     this.successMessage = page.locator('form.job-alert .form-message');
   }
 
@@ -78,9 +79,9 @@ export class JobAlertsSubscriptionPanel {
   }
 
   async expectKeywordAdded(category: string, location: string): Promise<void> {
-    await expect(this.subscriptionPanel.locator('.keyword-text')).toContainText(
-      `${category}, ${location}`,
-    );
+    await expect(
+      this.subscriptionPanel.locator('.keyword-text', { hasText: `${category}, ${location}` }),
+    ).toBeVisible();
   }
 
   async signUp(): Promise<void> {

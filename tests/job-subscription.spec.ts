@@ -18,7 +18,6 @@ test.describe('Job subscription', () => {
     homePage = new HomePage(page);
     jobsLandingPage = new JobsLandingPage(page);
     cookieBanner = new CookieBanner(page);
-
     subscriptionPanel = new JobAlertsSubscriptionPanel(page);
   });
 
